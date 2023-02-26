@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
-const TodoForm = ({ todos, setTodos }) => {
-    const [input, setInput] = useState("");
+const TodoForm = ({ submitTodos, edit }) => {
+    const [input, setInput] = useState(edit ? edit.title : "");
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        const newTodo = {
-            id: Math.floor(Math.random() * 100),
-            title: input,
-            status: false,
-        };
-        setTodos([...todos, newTodo]);
+        submitTodos(input);
         setInput("");
     };
 
@@ -27,16 +23,29 @@ const TodoForm = ({ todos, setTodos }) => {
                     type="text"
                     value={input}
                     onChange={handleChangeInput}
-                    placeholder="Enter Todo"
+                    placeholder={edit ? "Update Todo ..." : "Add Todo ..."}
                     autoFocus
                     required
                 />
-                <button
-                    type="submit"
-                    className="text-white bg-violet-500 py-2 px-2 cursor-pointer rounded-lg hover:scale-105 divide-neutral-500 transition-all"
-                >
-                    <PlusIcon className="h-6 w-6 text-slate-100 " />
-                </button>
+                {edit ? (
+                    <>
+                        <button
+                            type="submit"
+                            className="text-white bg-violet-500 py-2 px-2 cursor-pointer rounded-lg hover:scale-105 divide-neutral-500 transition-all"
+                        >
+                            <CheckIcon className="h-6 w-6 text-slate-100 " />
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            type="submit"
+                            className="text-white bg-violet-500 py-2 px-2 cursor-pointer rounded-lg hover:scale-105 divide-neutral-500 transition-all"
+                        >
+                            <PlusIcon className="h-6 w-6 text-slate-100 " />
+                        </button>
+                    </>
+                )}
             </div>
         </form>
     );

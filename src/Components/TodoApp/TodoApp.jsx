@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NavBar from "../NavBar/NavBar";
 import TodoForm from "../TodoForm/TodoForm";
 import TodoList from "../TodoList/TodoList";
 const TodoApp = () => {
@@ -26,6 +27,7 @@ const TodoApp = () => {
         );
         setTodos(editTitle);
     };
+
     return (
         <div className="flex flex-col items-center gap-5">
             <div className="flex flex-col items-center gap-2 mb-10">
@@ -38,6 +40,13 @@ const TodoApp = () => {
             </div>
             <div className="border-4 p-4 border-blue-600 rounded-xl ">
                 <TodoForm submitTodos={handleAddNewTodo} />
+            </div>
+            <div>
+                <NavBar
+                    remainingTodo={
+                        todos.filter((item) => item.status == false).length
+                    }
+                />
             </div>
             <TodoList
                 todos={todos}

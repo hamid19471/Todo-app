@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import TodoForm from "../TodoForm/TodoForm";
 import TodoList from "../TodoList/TodoList";
 const TodoApp = () => {
     const [todos, setTodos] = useState([]);
+    const [filter, setFilter] = useState([]);
+    const [todoStatus, setTodoStatus] = useState("All");
+
+    useEffect(() => {
+        filteringTodo(todoStatus);
+    }, [todos]);
+
     const handleDeleteTodo = (id) => {
         setTodos((prev) => prev.filter((item) => item.id !== id));
     };
@@ -27,7 +34,22 @@ const TodoApp = () => {
         );
         setTodos(editTitle);
     };
-
+    const filteringTodo = (selectStatus) => {
+        switch (selectStatus) {
+            case "All": {
+                setFilter(todos);
+                break;
+            }
+            case "Completed":
+                setFilter(todos.filter((item) => item.status));
+                break;
+            case "Uncompleted":
+                setFilter(todos.filter((item) => !item.status));
+                break;
+            default:
+                setFilter(todos);
+        }
+    };
     return (
         <div className="flex flex-col items-center gap-5">
             <div className="flex flex-col items-center gap-2 mb-10">
@@ -46,10 +68,13 @@ const TodoApp = () => {
                     remainingTodo={
                         todos.filter((item) => item.status == false).length
                     }
+                    filteringTodo={filteringTodo}
+                    todoStatus={todoStatus}
+                    setTodoStatus={setTodoStatus}
                 />
             </div>
             <TodoList
-                todos={todos}
+                todos={filter}
                 onDelete={handleDeleteTodo}
                 onComplete={handleCompleteTodo}
                 onUpdate={handleUpdateTodo}
